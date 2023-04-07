@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import google_svg from '../../assets/icons8-google-48.svg'
 
 const Login = () => {
@@ -16,7 +17,7 @@ const Login = () => {
                 <div className="mb-5">
                   <label htmlFor="password" className="form-label">Password</label>
                   <input type="password" className="form-control bg-transparent text-light" id="password" placeholder="Password"/>
-                  <a className="float-end mt-3 text-success" href="">Forgot password?</a>
+                  <Link className="float-end mt-3 text-success" to="/recovery">Forgot password?</Link>
                 </div>
                 <div className="text-center mt-3">
                   <button className="btn btn-lg btn-success w-100 mt-2 mb-3">Login</button>
@@ -28,7 +29,7 @@ const Login = () => {
                     <span> Login with Google</span>
                   </div>
                 </div>
-                <p className="text-center mt-3">No account? <a className="text-success" href="">Register</a></p>
+                <p className="text-center mt-3">No account? <Link className="text-success" to="/register">Register</Link></p>
               </form>
             </div>
           </div>
