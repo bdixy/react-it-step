@@ -7,3 +7,11 @@ export interface IRegisterPage {
   phone: string
   file: string
 }
+
+export interface IProductItem {
+  id?: number
+  name: string
+  price: number
+  description: string
+  image?: File | null
+}
