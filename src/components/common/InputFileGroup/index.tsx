@@ -7,13 +7,15 @@ import './style.css'
 interface InputFileGroupProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string // необов'язкове поле
   field: string //
-  onSelectFile: (file: File) => void //
+  onSelectFile: (base64: string) => void
+  errors?: string[]
 }
 
 const InputFileGroup: FC<InputFileGroupProps> = ({
                                                    label = "Оберіть файл",
                                                    field,
                                                    onSelectFile,
+                                                   errors
                                                  }) => {
   const [selectImage, setSelectImage] = useState<File | null>(null)
 
@@ -21,8 +23,14 @@ const InputFileGroup: FC<InputFileGroupProps> = ({
     const files = e.target.files // отримання файлу, який вибрав користувач
     if (files) { // якщо файл вибраний
       const file = files[0] // отримує перший файл
-      setSelectImage(file) // додає файл в стейт компонента
-      onSelectFile(file) // передає файл в функцію
+      setSelectImage(file)
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        onSelectFile(reader.result as string)
+      }
+      // setSelectImage(file) // додає файл в стейт компонента
+      // onSelectFile(file) // передає файл в функцію
     }
     e.target.value = ""
   }
@@ -37,11 +45,11 @@ const InputFileGroup: FC<InputFileGroupProps> = ({
           <img width="150"
                className="img-fluid"
                src={defaultImage}
-               style={{ cursor: "pointer" }}
+               style={{cursor: "pointer"}}
           />
 
         ) : (
-          <img width="150" src={URL.createObjectURL(selectImage)} />
+          <img width="150" src={URL.createObjectURL(selectImage)}/>
         )}
       </label>
 
@@ -51,6 +59,17 @@ const InputFileGroup: FC<InputFileGroupProps> = ({
         id={field}
         onChange={onChangeFileHandler}
       />
+
+      {
+        errors &&
+        <div className="alert alert-danger">
+          {errors.map((e, index) => (
+            <span key={index}>
+              {e}
+            </span>
+          ))}
+        </div>
+      }
     </div>
   )
 }

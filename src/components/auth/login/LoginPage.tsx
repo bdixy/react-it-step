@@ -17,7 +17,6 @@ const LoginPage = () => {
   const [error, setError] = useState<ILoginPageError[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
-  //
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 

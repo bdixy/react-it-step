@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { ChangeEvent, FC, InputHTMLAttributes } from "react"
 
 interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -5,6 +6,7 @@ interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
   type?: "text" | "password" | "email", // необов'язкове поле, яке може приймати "text" | "password" | "email"
   field: string,
   onChange: (e: ChangeEvent<HTMLInputElement>) => void // функція, яка приймає InputElement та нічого не повертає
+  errors?: string[]
 }
 
 const InputGroup: FC<InputGroupProps> = ({
@@ -12,7 +14,8 @@ const InputGroup: FC<InputGroupProps> = ({
                                            type = "text", // по дефолту тип text
                                            field,
                                            value,
-                                           onChange
+                                           onChange,
+                                           errors
                                          }) => {
   return (
     <div className="mb-3">
@@ -21,13 +24,26 @@ const InputGroup: FC<InputGroupProps> = ({
       </label>
       <input
         type={type}
-        className="form-control"
+        className={classNames("form-control", {
+          "is-invalid": errors
+        })}
         id={field}
         name={field}
         value={value}
         onChange={onChange}
         aria-describedby="emailHelp"
       />
+      {
+        errors &&
+        <div id="validationServerUsernameFeedback" className="invalid-feedback">
+          {errors.map((e, index) => (
+            <span key={index}>
+              {e}
+            </span>
+          ))}
+        </div>
+      }
+
     </div>
   )
 }
