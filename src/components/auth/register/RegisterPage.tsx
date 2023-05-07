@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from 'react'
 import http from '../../../http/http-common'
 import InputFileGroup from '../../common/InputFileGroup'
 import InputGroup from '../../common/InputGroup'
-import { ILoginPageError } from '../login/types'
 import { IRegisterError, IRegisterPage, ISelectItem } from './types'
 
 const RegisterPage = () => {

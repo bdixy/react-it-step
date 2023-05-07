@@ -38,7 +38,7 @@ const DefaultHeader = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/categories">Категорії</Link>
+                  <Link className="nav-link" to="/categories">Додати категорії</Link>
                 </li>
               </ul>
               <form className="d-flex" role="search">

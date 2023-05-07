@@ -1,8 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
+import setAuthToken from '../../../helpers/setAuthToken'
 import http from '../../../http/http-common'
 import InputGroup from '../../common/InputGroup'
-import { ILoginPage, ILoginPageError } from './types'
+import { ILoginPage, ILoginPageError, IUser } from './types'
+import jwt_decode from 'jwt-decode'
 
 const LoginPage = () => {
 
@@ -25,8 +27,12 @@ const LoginPage = () => {
 
     // запит на сервер
     http.post("api/account/login", data)
+
       .then(res => { // якщо немає помилок, то виводить в консоль, що вхід успішний
-        console.log("Вхід успішний", res)
+        const token = res.data.token as string
+        setAuthToken(token)
+        const user = jwt_decode<IUser>(token)
+        console.log("Вхід успішний", user.name)
       })
       .catch(badRequest => { // відловлення помилок
         const errors = badRequest.response.data.errors as ILoginPageError // приведення об'єкта до типу ILoginPageError
@@ -62,7 +68,6 @@ const LoginPage = () => {
       </div>
     ))
   }
-
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setData({...data, [e.target.name]: e.target.value})
