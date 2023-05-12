@@ -7,6 +7,8 @@ interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
   field: string,
   onChange: (e: ChangeEvent<HTMLInputElement>) => void // функція, яка приймає InputElement та нічого не повертає
   errors?: string[]
+  error?: string | undefined
+  touched?: boolean | undefined
 }
 
 const InputGroup: FC<InputGroupProps> = ({
@@ -15,7 +17,9 @@ const InputGroup: FC<InputGroupProps> = ({
                                            field,
                                            value,
                                            onChange,
-                                           errors
+                                           errors,
+                                           error,
+                                           touched
                                          }) => {
   return (
     <div className="mb-3">
@@ -25,7 +29,7 @@ const InputGroup: FC<InputGroupProps> = ({
       <input
         type={type}
         className={classNames("form-control", {
-          "is-invalid": errors
+          "is-invalid": errors || (error && touched)
         })}
         id={field}
         name={field}
@@ -43,7 +47,12 @@ const InputGroup: FC<InputGroupProps> = ({
           ))}
         </div>
       }
-
+      {
+        (error && touched) &&
+        <div id="validationServerUsernameFeedback" className="invalid-feedback">
+          {error}
+        </div>
+      }
     </div>
   )
 }

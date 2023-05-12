@@ -6,6 +6,7 @@ import HomePage from './components/home/HomePage'
 import LoginPage from './components/auth/login/LoginPage'
 import RegisterPage from './components/auth/register/RegisterPage'
 import { Routes, Route } from 'react-router-dom'
+import Profile from './components/profile/Profile'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="register" element={<RegisterPage/>}/>
           {/*<Route path="categories" element={<Categories/>}/>*/}
           <Route path="categories" element={<AddCategoriesPage/>}/>
+          <Route path="profile" element={<Profile/>}/>
         </Route>
       </Routes>
     </>

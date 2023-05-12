@@ -1,6 +1,20 @@
-import { Link } from 'react-router-dom'
+import jwt_decode from 'jwt-decode'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { AuthUserActionType, IAuthUser } from '../../auth/types'
+
+interface UserEmail {
+  name: string
+}
 
 const DefaultHeader = () => {
+  const {isAuth} = useSelector((store: any)=> store.auth as IAuthUser)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const {name} = jwt_decode<UserEmail>(localStorage.token) || {}
+
   return (
     <>
       <header data-bs-theme="dark">
@@ -28,30 +42,42 @@ const DefaultHeader = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">
-                    Вхід
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/register">
-                    Реєстрація
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/categories">Додати категорії</Link>
+                  <a className="nav-link disabled">Disabled</a>
                 </li>
               </ul>
-              <form className="d-flex" role="search">
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-              </form>
+              <ul className="navbar-nav">
+                {isAuth ? (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/logout" onClick={(e) => {
+                        e.preventDefault()
+                        localStorage.removeItem('token')
+                        dispatch({type: AuthUserActionType.LOGOUT_USER})
+                        navigate('/')
+                      }
+                      }>
+                        Вихід
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/profile">Профіль ({name})</Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/login">
+                        Вхід
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/register">
+                        Реєстрація
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
             </div>
           </div>
         </nav>

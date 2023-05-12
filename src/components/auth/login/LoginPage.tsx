@@ -1,8 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import setAuthToken from '../../../helpers/setAuthToken'
 import http from '../../../http/http-common'
 import InputGroup from '../../common/InputGroup'
+import { AuthUserActionType } from '../types'
 import { ILoginPage, ILoginPageError, IUser } from './types'
 import jwt_decode from 'jwt-decode'
 
@@ -18,6 +21,8 @@ const LoginPage = () => {
   const [data, setData] = useState<ILoginPage>(init)
   const [error, setError] = useState<ILoginPageError[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -27,17 +32,15 @@ const LoginPage = () => {
 
     // запит на сервер
     http.post("api/account/login", data)
-
       .then(res => { // якщо немає помилок, то виводить в консоль, що вхід успішний
         const token = res.data.token as string
         setAuthToken(token)
         const user = jwt_decode<IUser>(token)
-        console.log("Вхід успішний", user.name)
+        dispatch({type: AuthUserActionType.LOGIN_USER})
+        navigate('/profile')
       })
       .catch(badRequest => { // відловлення помилок
         const errors = badRequest.response.data.errors as ILoginPageError // приведення об'єкта до типу ILoginPageError
-        console.log("Вхід не успішний", badRequest.response.data)
-        console.log("Errors ", errors)
         setError([errors]) // запис помилок в масив
       })
 
