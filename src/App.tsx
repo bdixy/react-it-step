@@ -1,6 +1,9 @@
 import React from 'react'
+import ListProductsPage from './components/admin/products/ListProductsPage'
 import Categories from './components/Categories'
-import AddCategoriesPage from './components/categories/AddCategoriesPage'
+import AddProducts from './components/admin/products/AddProductsPage'
+import AddCategoriesPage from './components/admin/categories/AddCategoriesPage'
+import AdminLayout from './components/containers/admin/AdminLayout'
 import DefaultLayout from './components/containers/default/DefaultLayout'
 import HomePage from './components/home/HomePage'
 import LoginPage from './components/auth/login/LoginPage'
@@ -19,6 +22,10 @@ const App = () => {
           {/*<Route path="categories" element={<Categories/>}/>*/}
           <Route path="categories" element={<AddCategoriesPage/>}/>
           <Route path="profile" element={<Profile/>}/>
+        </Route>
+        <Route path="/admin" element={<AdminLayout/>}>
+          <Route path="/admin/products/add" element={<AddProducts/>}/>
+          <Route path="/admin/products/list" element={<ListProductsPage/>}/>
         </Route>
       </Routes>
     </>

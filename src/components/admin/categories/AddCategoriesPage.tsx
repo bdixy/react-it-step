@@ -2,9 +2,9 @@ import classNames from 'classnames'
 import React, { ChangeEvent, useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { Spinner } from 'react-bootstrap'
-import http from '../../http/http-common'
-import InputFileGroup from '../common/InputFileGroup'
-import InputGroup from '../common/InputGroup'
+import http from '../../../http/http-common'
+import InputFileGroup from '../../common/InputFileGroup'
+import InputGroup from '../../common/InputGroup'
 
 interface ICategories {
   title: string

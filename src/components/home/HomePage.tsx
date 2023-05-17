@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import http from '../../http/http-common'
-import { AuthUserActionType } from '../auth/types'
 import DeleteModal from '../common/Modals/DeleteModal'
 import Carousel from './Carousel'
-import { ICategoryItem } from './types'
+import { ICategoryItem } from '../admin/types'
 
 const HomePage = () => {
   const [list, setList] = useState<ICategoryItem[]>([])
   const [showModal, setShowModal] = useState(false)
   const [deleteId, setDeleteId] = useState<number | null>(null)
-  const dispatch = useDispatch()
 
   useEffect(() => {
     http.get<ICategoryItem[]>("api/Categories/list")
-      .then(res => setList(res.data))
+      .then(res => {
+        setList(res.data)
+      })
   }, [])
 
   const onDeleteHandle = async () => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import http from '../../http/http-common'
-import { ICategoryItem } from '../home/types'
+import { ICategoryItem } from '../admin/types'
 
 interface IUserData {
   id: number

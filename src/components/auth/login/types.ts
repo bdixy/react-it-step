@@ -11,9 +11,3 @@ export interface ILoginPageError {
   password: string[]
   invalid: string[]
 }
-
-export interface IUser {
-  name: string
-  image: string
-  roles: string
-}

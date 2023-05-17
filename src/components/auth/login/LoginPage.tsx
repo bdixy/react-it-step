@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import setAuthToken from '../../../helpers/setAuthToken'
 import http from '../../../http/http-common'
 import InputGroup from '../../common/InputGroup'
-import { AuthUserActionType } from '../types'
-import { ILoginPage, ILoginPageError, IUser } from './types'
+import { AuthUserActionType, IUser } from '../types'
+import { ILoginPage, ILoginPageError } from './types'
 import jwt_decode from 'jwt-decode'
 
 const LoginPage = () => {
@@ -36,7 +36,7 @@ const LoginPage = () => {
         const token = res.data.token as string
         setAuthToken(token)
         const user = jwt_decode<IUser>(token)
-        dispatch({type: AuthUserActionType.LOGIN_USER})
+        dispatch({type: AuthUserActionType.LOGIN_USER, payload: user})
         navigate('/profile')
       })
       .catch(badRequest => { // відловлення помилок

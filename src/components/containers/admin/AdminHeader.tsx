@@ -1,15 +1,10 @@
-import jwt_decode from 'jwt-decode'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthUserActionType, IAuthUser } from '../../auth/types'
 
-interface UserEmail {
-  name: string
-}
-
-const DefaultHeader = () => {
-  const {isAuth, user} = useSelector((store: any)=> store.auth as IAuthUser)
+const AdminHeader = () => {
+  const {isAuth} = useSelector((store: any)=> store.auth as IAuthUser)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -18,8 +13,8 @@ const DefaultHeader = () => {
       <header data-bs-theme="dark">
         <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
           <div className="container">
-            <Link className="navbar-brand" to="/">
-              Магазин
+            <Link className="navbar-brand" to="/admin">
+              Адмін панель
             </Link>
             <button
               className="navbar-toggler"
@@ -58,7 +53,7 @@ const DefaultHeader = () => {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/profile">Профіль ({user?.name})</Link>
+                      <Link className="nav-link" to="/profile">Профіль</Link>
                     </li>
                   </>
                 ) : (
@@ -84,4 +79,4 @@ const DefaultHeader = () => {
   )
 }
 
-export default DefaultHeader
+export default AdminHeader

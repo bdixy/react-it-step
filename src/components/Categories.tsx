@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 
-// інтерфейс, який описує параметри категорії
 interface ICategories {
   id: number
   title: string

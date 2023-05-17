@@ -3,7 +3,8 @@ import { ChangeEvent, FC, InputHTMLAttributes } from "react"
 
 interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string,
-  type?: "text" | "password" | "email", // необов'язкове поле, яке може приймати "text" | "password" | "email"
+  type?: "text" | "number" | "password" | "email", // необов'язкове поле, яке може приймати "text" | "password" |
+  // "email"
   field: string,
   onChange: (e: ChangeEvent<HTMLInputElement>) => void // функція, яка приймає InputElement та нічого не повертає
   errors?: string[]

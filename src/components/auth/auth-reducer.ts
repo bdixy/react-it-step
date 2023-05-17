@@ -9,12 +9,14 @@ export const AuthReducer = (state = initState, action: any): IAuthUser => {
     case AuthUserActionType.LOGIN_USER:
       return {
         ...state,
-        isAuth: true
+        isAuth: true,
+        user: action.payload
       }
     case AuthUserActionType.LOGOUT_USER:
       return {
         ...state,
-        isAuth: false
+        isAuth: false,
+        user: undefined
       }
   }
 
