@@ -32,7 +32,7 @@ const AddCategoriesPage = () => {
 
     try {
       await http.post('api/categories/add', data)
-      navigate("/")
+      navigate("/admin/categories/list")
     } catch (e) {
       console.log(e)
     }

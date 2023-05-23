@@ -1,6 +1,6 @@
 import React from 'react'
+import ListCategoriesPage from './components/admin/categories/ListCategoriesPage'
 import ListProductsPage from './components/admin/products/ListProductsPage'
-import Categories from './components/Categories'
 import AddProducts from './components/admin/products/AddProductsPage'
 import AddCategoriesPage from './components/admin/categories/AddCategoriesPage'
 import AdminLayout from './components/containers/admin/AdminLayout'
@@ -19,13 +19,14 @@ const App = () => {
           <Route index element={<HomePage/>}/>
           <Route path="login" element={<LoginPage/>}/>
           <Route path="register" element={<RegisterPage/>}/>
-          {/*<Route path="categories" element={<Categories/>}/>*/}
           <Route path="categories" element={<AddCategoriesPage/>}/>
           <Route path="profile" element={<Profile/>}/>
         </Route>
         <Route path="/admin" element={<AdminLayout/>}>
           <Route path="/admin/products/add" element={<AddProducts/>}/>
           <Route path="/admin/products/list" element={<ListProductsPage/>}/>
+          <Route path="/admin/categories/add" element={<AddCategoriesPage/>}/>
+          <Route path="/admin/categories/list" element={<ListCategoriesPage/>}/>
         </Route>
       </Routes>
     </>
