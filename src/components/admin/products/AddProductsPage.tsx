@@ -5,68 +5,49 @@ import { Spinner } from 'react-bootstrap'
 import * as yup from 'yup'
 import http from '../../../http/http-common'
 import InputGroup from '../../common/InputGroup'
-import { ICategorySelect, IProducts, IProductsPhoto } from '../types'
+import { ICategorySelect, IProducts } from '../types'
+import InputFileProductGroup from '../../common/InputFileProductGroup'
+import { useNavigate } from 'react-router-dom'
 
 const AddProductsPage = () => {
   const [products, setProducts] = useState<ICategorySelect[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [photos, setPhotos] = useState<string | null>(null)
 
   const init: IProducts = {
-    name: "",
+    name: '',
     priority: 0,
     categoryId: 0,
     price: 0,
-    description: "",
+    description: '',
     ids: []
   }
 
+  const navigate = useNavigate()
+
   useEffect(() => {
-    http.get<ICategorySelect[]>("api/categories/list")
+    http.get<ICategorySelect[]>('api/categories/list')
       .then(res => setProducts(res.data))
   }, [])
 
   const onFormikSubmit = async (values: IProducts) => {
-    // try {
-    //   const file = values.ids && values.image[0]
-    //   if (file) {
-    //     const url = URL.createObjectURL(file)
-    //     setPhotos(url)
-    //     await uploadImage(file)
-    //     console.log("Upload photo")
-    //   }
-    // } catch (error) {
-    //   console.error("Error uploading photo", error)
-    // }
-  }
-
-  const uploadImage = async (file: File) => {
     try {
-      const formData = new FormData()
-      formData.append("image", file)
-      await http.post("api/products/upload", formData)
-    } catch (error) {
-      console.error("Error uploading image", error)
-      throw error
-    }
-  }
-
-  const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setPhotos(url)
+      await http.post("api/products/add", values)
+      navigate("/admin/products/list")
+    } catch (e) {
+      console.log(e)
     }
   }
 
   const validSchema = yup.object({
-    name: yup.string()
-      .required("Вкажіть назву"),
-    priority: yup.number().required("Вкажіть приорітет"),
-    categoryId: yup.number().required("Вкажіть категорію (id)"),
+    name: yup.string().required("Вкажіть назву"),
+    priority: yup.number().min(1, 'Приорітет має бути більше 0'),
+    categoryId: yup.number().min(1, 'Оберіть категорію'),
+    description: yup.string().required("Вкажіть опис"),
     price: yup.number().required("Вкажіть ціну"),
-    description: yup.string().required("Вкажіть опис")
-  })
+    ids: yup.array().of(yup.number())
+      .min(1, 'Мінімум одна фотка для товару')
+      .required('Оберіть хочаб одне фото'),
+  });
 
   const formik = useFormik({
     initialValues: init,
@@ -116,19 +97,23 @@ const AddProductsPage = () => {
             {/*  touched={touched.categoryId}*/}
             {/*/>*/}
 
-            <div className="my-3">
-              <label className="form-label" htmlFor="categoryId">
+            <div className="mb-3">
+              <label htmlFor="categoryId" className="form-label">
                 Оберіть категорію
               </label>
               <select
-                className="form-select"
+                className={classNames("form-select", {
+                  "is-invalid": errors.categoryId && touched.categoryId,
+                })}
                 defaultValue={values.categoryId}
                 aria-label="Default select example"
-                name="categoryId"
-                id="categoryId"
                 onChange={handleChange}
+                name="categoryId"
+                id="categoryid"
               >
-                <option value="0" disabled>Оберіть категорію</option>
+                <option value="0" disabled>
+                  Оберіть категорію
+                </option>
                 {viewCategoriesOption}
               </select>
             </div>
@@ -156,14 +141,16 @@ const AddProductsPage = () => {
           </div>
         </div>
 
-        {/*<InputFileGroup*/}
-        {/*  label="Оберіть фото для товару"*/}
-        {/*  field="image"*/}
-        {/*  onSelectFile={(base64) => setData({...data, image: base64})}*/}
-        {/*/>*/}
+        <InputFileProductGroup
+          label="Оберіть фото для товару"
+          field="image"
+          error={errors.ids}
+          touched={touched.ids}
+          onSelectFile={(id) => setFieldValue('ids', [...values.ids, id])}
+        />
 
-        <button type="submit" className={classNames("btn btn-primary", {
-          "disabled": loading
+        <button type="submit" className={classNames('btn btn-primary', {
+          'disabled': loading
         })}>
           {loading && <Spinner animation="border" size="sm" variant="light"/>}
           {loading ? ' Завантаження...' : 'Додати'}

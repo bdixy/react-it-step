@@ -21,7 +21,7 @@ export interface IProducts {
 }
 
 export interface IProductsPhoto {
-  id: number,
+  id: number
   name: string
 }
 
@@ -33,4 +33,26 @@ export interface IProductsItem {
   price: number
   description: string
   images: string[]
+}
+
+export interface IProductItem {
+  id: number
+  name: string
+  categoryName: string
+  priority: number
+  description: string
+  images: string[]
+  price: number
+}
+
+export interface IProductSearchResult {
+  products: Array<IProductItem>
+  pages: number
+  currentPage: number
+  total: number
+  categoryName: string
+}
+
+export interface IProductSearch {
+  page: number | string
 }

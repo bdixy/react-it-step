@@ -23,8 +23,10 @@ const App = () => {
           <Route path="profile" element={<Profile/>}/>
         </Route>
         <Route path="/admin" element={<AdminLayout/>}>
-          <Route path="/admin/products/add" element={<AddProducts/>}/>
-          <Route path="/admin/products/list" element={<ListProductsPage/>}/>
+          <Route path="products">
+            <Route index element={<ListProductsPage/>}/>
+            <Route path="add" element={<AddProducts/>}/>
+          </Route>
           <Route path="/admin/categories/add" element={<AddCategoriesPage/>}/>
           <Route path="/admin/categories/list" element={<ListCategoriesPage/>}/>
         </Route>
