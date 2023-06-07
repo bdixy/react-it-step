@@ -10,6 +10,7 @@ import LoginPage from './components/auth/login/LoginPage'
 import RegisterPage from './components/auth/register/RegisterPage'
 import { Routes, Route } from 'react-router-dom'
 import Profile from './components/profile/Profile'
+import ProductDetail from './components/products/ProductDetail'
 
 const App = () => {
   return (
@@ -22,13 +23,16 @@ const App = () => {
           <Route path="categories" element={<AddCategoriesPage/>}/>
           <Route path="profile" element={<Profile/>}/>
         </Route>
-        <Route path="/admin" element={<AdminLayout/>}>
+        <Route path="admin" element={<AdminLayout/>}>
           <Route path="products">
             <Route index element={<ListProductsPage/>}/>
             <Route path="add" element={<AddProducts/>}/>
+            <Route path=":id" element={<ProductDetail/>}/>
           </Route>
-          <Route path="/admin/categories/add" element={<AddCategoriesPage/>}/>
-          <Route path="/admin/categories/list" element={<ListCategoriesPage/>}/>
+          <Route path="categories">
+            <Route index element={<ListCategoriesPage/>}/>
+            <Route path="add" element={<AddCategoriesPage/>}/>
+          </Route>
         </Route>
       </Routes>
     </>

@@ -8,6 +8,8 @@ import InputGroup from '../../common/InputGroup'
 import { ICategorySelect, IProducts } from '../types'
 import InputFileProductGroup from '../../common/InputFileProductGroup'
 import { useNavigate } from 'react-router-dom'
+import { Editor } from '@tinymce/tinymce-react'
+import EditorTiny from '../../common/EditorTiny'
 
 const AddProductsPage = () => {
   const [products, setProducts] = useState<ICategorySelect[]>([])
@@ -97,6 +99,18 @@ const AddProductsPage = () => {
             {/*  touched={touched.categoryId}*/}
             {/*/>*/}
 
+          </div>
+          <div className="col-md-6">
+            <InputGroup
+              label="Ціна"
+              type="number"
+              field="price"
+              value={values.price}
+              onChange={handleChange}
+              error={errors.price}
+              touched={touched.price}
+            />
+
             <div className="mb-3">
               <label htmlFor="categoryId" className="form-label">
                 Оберіть категорію
@@ -118,28 +132,26 @@ const AddProductsPage = () => {
               </select>
             </div>
           </div>
-          <div className="col-md-6">
-            <InputGroup
-              label="Ціна"
-              type="number"
-              field="price"
-              value={values.price}
-              onChange={handleChange}
-              error={errors.price}
-              touched={touched.price}
-            />
-
-            <InputGroup
-              label="Опис"
-              type="text"
-              field="description"
-              value={values.description}
-              onChange={handleChange}
-              error={errors.description}
-              touched={touched.description}
-            />
-          </div>
         </div>
+
+        <EditorTiny
+          label="Опис"
+          field="description"
+          value={values.description}
+          error={errors.description}
+          touched={touched.description}
+          onEditorChange={(text) => setFieldValue("description", text)}
+        />
+
+        {/*<InputGroup*/}
+        {/*  label="Опис"*/}
+        {/*  type="text"*/}
+        {/*  field="description"*/}
+        {/*  value={values.description}*/}
+        {/*  onChange={handleChange}*/}
+        {/*  error={errors.description}*/}
+        {/*  touched={touched.description}*/}
+        {/*/>*/}
 
         <InputFileProductGroup
           label="Оберіть фото для товару"

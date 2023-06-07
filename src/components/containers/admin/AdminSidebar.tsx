@@ -23,23 +23,16 @@ const AdminSidebar = () => {
             </li>
 
             <li className="nav-item">
-              <Link to="/admin/categories/list" className="nav-link align-middle px-0">
+              <Link to="/admin/categories" className="nav-link align-middle px-0">
                 <i className="fa fa-bars" aria-hidden="true"></i>{" "}
                 <span className="ms-1 d-none d-sm-inline">Категорії</span>
               </Link>
             </li>
 
             <li className="nav-item">
-              <Link to="/admin/products/list" className="nav-link align-middle px-0">
+              <Link to="/admin/products" className="nav-link align-middle px-0">
                 <i className="fa fa-bars" aria-hidden="true"></i>{" "}
                 <span className="ms-1 d-none d-sm-inline">Товари</span>
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to="/admin/products/add" className="nav-link align-middle px-0">
-                <i className="fa fa-bars" aria-hidden="true"></i>{" "}
-                <span className="ms-1 d-none d-sm-inline">Додати товар</span>
               </Link>
             </li>
 

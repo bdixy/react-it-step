@@ -19,6 +19,7 @@ const ListCategoriesPage = () => {
   const onDeleteHandle = async () => {
     try {
       await http.delete(`api/categories/delete/${deleteId}`)
+      setList(list.filter(x => x.id != deleteId))
     } catch (e) {
       console.log(e)
     }

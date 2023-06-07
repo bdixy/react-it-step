@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom'
 import http from '../../../http/http-common'
 import { IProductSearch, IProductSearchResult } from '../types'
 import classNames from 'classnames'
+import ModalDeleteLesson from '../../common/Modals/ModalDeleteLesson'
+import parse from 'html-react-parser'
 
 const ListProductsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -40,6 +42,15 @@ const ListProductsPage = () => {
     </li>
   ))
 
+  const onDelete = async (id: number) => {
+    try {
+      await http.delete(`/api/products/delete/${id}`)
+      setSearch({page: 1})
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const viewList = products?.map((item) => (
     <tr key={item.id}>
       <th scope="row">{item.id}</th>
@@ -49,16 +60,25 @@ const ListProductsPage = () => {
         ))}
         {/*{item.images && <img src={`${import.meta.env.VITE_API_URL}images/50_${item.images[0]}`} alt={item.images[0]}/>}*/}
       </td>
-      <td>{item.name}</td>
+      <td>
+        <Link className="text-decoration-none text-dark" to={`/admin/products/${item.id}`}>{item.name}</Link>
+      </td>
       <td>{item.categoryName}</td>
-      <td>{item.description}</td>
+      <td>{parse(item.description)}</td>
+      <td>
+        <ModalDeleteLesson
+          id={item.id}
+          text={`Ви дійсно бажаєте видалити '${item.name}'?`}
+          deleteFunc={onDelete}
+        />
+      </td>
     </tr>
   ))
 
   return (
     <>
       <h1 className="text-center">Головна сторінка</h1>
-      <Link to="admin/products/add" className="btn btn-success">
+      <Link to="/admin/products/add" className="btn btn-success">
         Додати
       </Link>
 
@@ -70,6 +90,7 @@ const ListProductsPage = () => {
           <th scope="col">Назва</th>
           <th scope="col">Категорія</th>
           <th scope="col">Опис</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>{viewList}</tbody>
