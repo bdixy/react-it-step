@@ -7,6 +7,7 @@ import { IUploadImage, IUploadImageResult } from './types'
 interface InputFileProductGroupProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   field: string
+  onRemoveFile: (id: number) => void
   onSelectFile: (id: number) => void
   errors?: string[]
   error?: string | string[] | undefined
@@ -16,13 +17,21 @@ interface InputFileProductGroupProps extends InputHTMLAttributes<HTMLInputElemen
 const InputFileProductGroup: FC<InputFileProductGroupProps> = ({
                                                                  label = 'Оберіть файл',
                                                                  field,
+                                                                 onRemoveFile,
                                                                  onSelectFile,
                                                                  errors,
                                                                  error,
                                                                  touched
                                                                }) => {
-  const [images, setImages] = useState<string[]>([])
+  const [images, setImages] = useState<IUploadImageResult[]>([])
 
+  const onRemoveImage = (img: IUploadImageResult) => {
+    console.log("Remove image", img);
+    setImages(images.filter((x) => x.id !== img.id))
+
+    //setImages(images.splice(img, 1))
+    onRemoveFile(img.id)
+  }
   const onChangeFileHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (files) {
@@ -40,8 +49,8 @@ const InputFileProductGroup: FC<InputFileProductGroupProps> = ({
         }
         try {
           const response = await http.post<IUploadImageResult>('api/product/upload', upload)
-          const imageServer= response.data
-          setImages([...images, response.data.name])
+          const imageServer = response.data
+          setImages([...images, response.data])
           onSelectFile(imageServer.id)
         } catch (e) {
           console.log(e)
@@ -74,12 +83,19 @@ const InputFileProductGroup: FC<InputFileProductGroupProps> = ({
           />
         </div>
 
-        {images.map((item, index) => (
-          <div key={index} className="col-md-3">
+        {images.map((item) => (
+          <div key={item.id} className="col-md-4 mt-5">
+            <div>
+              <i
+                className="fa fa-times fa-2x fa-fw text-danger"
+                style={{ cursor: "pointer" }}
+                onClick={() => onRemoveImage(item)}
+              ></i>
+            </div>
             <img
-              width="100"
+              width="80%"
               className="img-fluid"
-              src={`${import.meta.env.VITE_API_URL}images/300_${item}`}
+              src={`${import.meta.env.VITE_API_URL}images/300_${item.name}`}
             />
           </div>
         ))}

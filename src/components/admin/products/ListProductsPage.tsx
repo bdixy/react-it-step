@@ -1,16 +1,36 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import http from '../../../http/http-common'
-import { IProductSearch, IProductSearchResult } from '../types'
+import { ICategorySelect, IProductSearch, IProductSearchResult } from '../types'
 import classNames from 'classnames'
 import ModalDeleteLesson from '../../common/Modals/ModalDeleteLesson'
 import parse from 'html-react-parser'
+import { useFormik } from 'formik'
+import InputGroup from '../../common/InputGroup'
 
 const ListProductsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [list, setList] = useState<IProductSearchResult>()
   const [search, setSearch] = useState<IProductSearch>({
-    page: searchParams.get("page") || 1
+    name: searchParams.get('name') || '',
+    price: searchParams.get('price') || '',
+    categorySlug: searchParams.get('categorySlug') || '',
+    page: searchParams.get('page') || 1
+  })
+  const [categories, setCategories] = useState<ICategorySelect[]>([])
+
+  useEffect(() => {
+    http.get<ICategorySelect[]>('api/categories/list')
+      .then(res => setCategories(res.data))
+  }, [])
+
+  const onSubmitSearch = (values: IProductSearch) => {
+    setSearch(values)
+  }
+
+  const formik = useFormik({
+    initialValues: search,
+    onSubmit: onSubmitSearch
   })
 
   useEffect(() => {
@@ -45,7 +65,7 @@ const ListProductsPage = () => {
   const onDelete = async (id: number) => {
     try {
       await http.delete(`/api/products/delete/${id}`)
-      setSearch({page: 1})
+      setSearch({...search, page: 1})
     } catch (e) {
       console.log(e)
     }
@@ -63,6 +83,7 @@ const ListProductsPage = () => {
       <td>
         <Link className="text-decoration-none text-dark" to={`/admin/products/${item.id}`}>{item.name}</Link>
       </td>
+      <td>{item.price}</td>
       <td>{item.categoryName}</td>
       <td>{parse(item.description)}</td>
       <td>
@@ -75,9 +96,68 @@ const ListProductsPage = () => {
     </tr>
   ))
 
+  const {values, touched, errors, handleSubmit, handleChange, setFieldValue} = formik
+
+  const viewCategoriesOption = categories.map((item) => (
+    <option key={item.id} value={item.id}>{item.title}</option>
+  ))
+
   return (
     <>
       <h1 className="text-center">Головна сторінка</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="row">
+          <div className="col-md-3">
+            <InputGroup
+              label="Назва"
+              field="name"
+              value={values.name}
+              onChange={handleChange}
+              error={errors.name}
+              touched={touched.name}
+            />
+          </div>
+          <div className="col-md-3">
+            <InputGroup
+              label="Ціна"
+              field="price"
+              value={values.price}
+              onChange={handleChange}
+              error={errors.price}
+              touched={touched.price}
+            />
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="categorySlug" className="form-label">
+              Оберіть категорію
+            </label>
+            <select
+              className={classNames("form-select", {
+                "is-invalid": errors.categorySlug && touched.categorySlug,
+              })}
+              defaultValue={values.categorySlug}
+              aria-label="Default select example"
+              onChange={handleChange}
+              name="categorySlug"
+              id="categorySlug"
+            >
+              <option value="0">
+                Оберіть категорію
+              </option>
+              {viewCategoriesOption}
+            </select>
+          </div>
+          <div className="col-md-3">
+            <button
+              type="submit"
+              className="btn btn-primary"
+            >
+              Шукати
+            </button>
+          </div>
+        </div>
+      </form>
+
       <Link to="/admin/products/add" className="btn btn-success">
         Додати
       </Link>
@@ -88,6 +168,7 @@ const ListProductsPage = () => {
           <th scope="col">Id</th>
           <th scope="col">Фото</th>
           <th scope="col">Назва</th>
+          <th scope="col">Ціна</th>
           <th scope="col">Категорія</th>
           <th scope="col">Опис</th>
           <th></th>

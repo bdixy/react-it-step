@@ -159,6 +159,12 @@ const AddProductsPage = () => {
           error={errors.ids}
           touched={touched.ids}
           onSelectFile={(id) => setFieldValue('ids', [...values.ids, id])}
+          onRemoveFile={(id) => {
+            setFieldValue(
+              "ids",
+              values.ids.filter((x) => x !== id)
+            );
+          }}
         />
 
         <button type="submit" className={classNames('btn btn-primary', {

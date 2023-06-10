@@ -9,6 +9,7 @@ export interface ICategoryItem {
 export interface ICategorySelect {
   id: number
   title: string
+  urlSlug: string
 }
 
 export interface IProducts {
@@ -54,5 +55,8 @@ export interface IProductSearchResult {
 }
 
 export interface IProductSearch {
+  name: string
+  price: number | string
+  categorySlug: string
   page: number | string
 }
