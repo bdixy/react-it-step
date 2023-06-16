@@ -1,8 +1,9 @@
-import { ChangeEvent, FC, InputHTMLAttributes, useState } from 'react'
+import { ChangeEvent, FC, InputHTMLAttributes, useEffect, useState } from 'react'
 import upload from '../../../assets/upload.png'
 import './style.css'
 import http from '../../../http/http-common'
 import { IUploadImage, IUploadImageResult } from './types'
+import { IProductImageItem } from '../../admin/types'
 
 interface InputFileProductGroupProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -12,6 +13,7 @@ interface InputFileProductGroupProps extends InputHTMLAttributes<HTMLInputElemen
   errors?: string[]
   error?: string | string[] | undefined
   touched?: boolean | undefined
+  imgView?: IProductImageItem[]
 }
 
 const InputFileProductGroup: FC<InputFileProductGroupProps> = ({
@@ -21,12 +23,17 @@ const InputFileProductGroup: FC<InputFileProductGroupProps> = ({
                                                                  onSelectFile,
                                                                  errors,
                                                                  error,
-                                                                 touched
+                                                                 touched,
+                                                                 imgView = []
                                                                }) => {
   const [images, setImages] = useState<IUploadImageResult[]>([])
 
+  useEffect(() => {
+    setImages(imgView)
+  }, [imgView])
+
   const onRemoveImage = (img: IUploadImageResult) => {
-    console.log("Remove image", img);
+    console.log('Remove image', img)
     setImages(images.filter((x) => x.id !== img.id))
 
     //setImages(images.splice(img, 1))
@@ -83,12 +90,29 @@ const InputFileProductGroup: FC<InputFileProductGroupProps> = ({
           />
         </div>
 
-        {images.map((item) => (
+        {imgView.map((item) => (
           <div key={item.id} className="col-md-4 mt-5">
             <div>
               <i
                 className="fa fa-times fa-2x fa-fw text-danger"
                 style={{ cursor: "pointer" }}
+                onClick={() => onRemoveImage(item)}
+              ></i>
+            </div>
+            <img
+              width="80%"
+              className="img-fluid"
+              src={`${import.meta.env.VITE_API_URL}images/300_${item.name}`}
+            />
+          </div>
+        ))}
+
+        {images.map((item) => (
+          <div key={item.id} className="col-md-4 mt-5">
+            <div>
+              <i
+                className="fa fa-times fa-2x fa-fw text-danger"
+                style={{cursor: 'pointer'}}
                 onClick={() => onRemoveImage(item)}
               ></i>
             </div>

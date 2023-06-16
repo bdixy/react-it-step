@@ -92,6 +92,10 @@ const ListProductsPage = () => {
           text={`Ви дійсно бажаєте видалити '${item.name}'?`}
           deleteFunc={onDelete}
         />
+        {/*&nbsp;*/}
+      </td>
+      <td>
+        <Link className="btn btn-primary" to={`edit/${item.id}`}>Змінити</Link>
       </td>
     </tr>
   ))
@@ -171,6 +175,7 @@ const ListProductsPage = () => {
           <th scope="col">Ціна</th>
           <th scope="col">Категорія</th>
           <th scope="col">Опис</th>
+          <th></th>
           <th></th>
         </tr>
         </thead>

@@ -49,7 +49,7 @@ const AddProductsPage = () => {
     ids: yup.array().of(yup.number())
       .min(1, 'Мінімум одна фотка для товару')
       .required('Оберіть хочаб одне фото'),
-  });
+  })
 
   const formik = useFormik({
     initialValues: init,

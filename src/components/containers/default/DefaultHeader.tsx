@@ -1,15 +1,11 @@
-import jwt_decode from 'jwt-decode'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthUserActionType, IAuthUser } from '../../auth/types'
-
-interface UserEmail {
-  name: string
-}
+import { AiOutlineShoppingCart } from 'react-icons/ai'
 
 const DefaultHeader = () => {
-  const {isAuth, user} = useSelector((store: any)=> store.auth as IAuthUser)
+  const {isAuth, user} = useSelector((store: any) => store.auth as IAuthUser)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -59,6 +55,11 @@ const DefaultHeader = () => {
                     </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/profile">Профіль ({user?.name})</Link>
+                    </li>
+                    <li>
+                      <Link to="/cart" className="btn text-success">
+                        <AiOutlineShoppingCart style={{width: '25px', height: '25px'}}/>
+                      </Link>
                     </li>
                   </>
                 ) : (

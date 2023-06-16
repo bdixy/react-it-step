@@ -60,3 +60,28 @@ export interface IProductSearch {
   categorySlug: string
   page: number | string
 }
+
+export interface IProductsEdit {
+  id: number
+  name: string
+  priority: number
+  categoryId: number
+  price: number
+  description: string
+  ids: number[]
+}
+
+export interface IProductImageItem {
+  id: number
+  name: string
+}
+
+export interface IProductGetItem {
+  id: number | string | undefined
+  name: string
+  priority: number
+  categoryId: number
+  price: number
+  description: string
+  images: IProductImageItem[]
+}

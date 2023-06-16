@@ -8,15 +8,20 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
-import { IUser } from './components/auth/login/types'
-import { AuthUserActionType } from './components/auth/types'
+import { AuthUserActionType, IUser } from './components/auth/types'
 import setAuthToken from './helpers/setAuthToken'
 import { store } from './store'
+import { CartActionType } from './components/cart/types'
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
   const user = jwt_decode<IUser>(localStorage.token)
   store.dispatch({type: AuthUserActionType.LOGIN_USER, payload: user})
+}
+
+if(localStorage.cart.length > 0) {
+  const cartIds = JSON.parse(localStorage.getItem('cart') || '[]') as number
+  store.dispatch({type: CartActionType.CART_LIST, payload: cartIds})
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
